@@ -1,0 +1,21 @@
+# config file for simulating reads
+
+reference_files:
+  Hsapiens_ensembl:
+    fasta: "/Users/tessa/dib-lab/simulate_reads/Homo_sapiens/Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa"
+    gff: "/Users/tessa/dib-lab/simulate_reads/Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf"
+
+attributes:
+  gene_name:
+    - GNAS
+    - AGER
+    - CDKN2A 
+    - CSF2RA
+    - GNRHR
+    - XBP1
+
+simulation_params:
+  read_len: 150
+  paired: False
+  num_rep: 5
+  num_reads_per_transcript: 1000

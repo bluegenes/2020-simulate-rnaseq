@@ -21,11 +21,12 @@ print(attribute_value)
 # 1. Filter full gff and write temp subset gff
 # read in gff (uses rtracklayer library)
 gff <- import(full_gff)
-#filtered_gff <- subset(full_gff, seqnames  %in% seqnames_to_keep)
 
-new_gff <- subset(gff, "gene_name" == attribute_value)
-print(new_gff)
-# write mini gff
-#export(subset(gff, attribute == attribute_value), output_gff)
-export(subset(gff, gene_name == attribute_value), output_gff)
-#export(subset(filtered, gene_name == "XBP1"), "XBP1.gff3")
+## right now, only works for gene_name attr
+# why does this work, but using attribute _not_ work?
+mini_gff <- subset(gff, gene_name == attribute_value)
+
+export(mini_gff, output_gff)
+
+# add other filtering
+#filtered_gff <- subset(full_gff, seqnames  %in% seqnames_to_keep)
