@@ -22,7 +22,9 @@ for attr in attribute_info.keys():
         attributeD[val] = attr
 
 rule all:
-    input: expand(os.path.join(simdir, "{ref}", "{gene}", "sample_01.fasta"), gene=attributeD.keys(), ref="Hsapiens_ensembl")
+    input: 
+        expand(os.path.join(simdir, "{ref}", "{gene}", "sample_01.fasta"), gene=attributeD.keys(), ref="Hsapiens_ensembl"),
+        expand(os.path.join(simdir, "{ref}", "{gene}", "flank{flank}", "sample_01.fasta"), gene=attributeD.keys(), ref="Hsapiens_ensembl", flank = config["flank_bp"])
 
 # using R and filtering individually is slow and unnecessary. maybe switch to biopython and grab all attributes with a single passthrough
 rule filter_gff:
@@ -35,7 +37,36 @@ rule filter_gff:
     conda: "polyester-env.yml"
     script: "filter_gff.R"
 
+
 # right now we're getting the exact matching range. to do: add flank, slop to get regions around these genes
+# flank gets the regions around the features, excluding the features themselves. 
+# slop gets the regions around the features INCLUDING the features themselves
+
+rule bedtools_flank:
+    input:
+        fasta= lambda w: reffiles[w.refname]["fasta"],
+        gff=rules.filter_gff.output
+    output: 
+        gff=os.path.join(datadir, "{refname}", "{gene_name}.flank{flank}.gff")
+        fasta=os.path.join(datadir, "{refname}", "{gene_name}.flank{flank}.fasta")
+    log: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.log")
+    benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.benchmark")
+    params:
+        flank: lambda w: w.flank,
+    conda: "bedtools-env.yml"
+    shell:
+        """
+        bedtools flank -b {params.flank} -i {input.gff} -g {input.fasta} > {output.gff} 2> {log}
+        bedtools getfasta -fi {input.fasta} -bed {output.gff} > {output.fasta} 2>> {log}
+        """
+
+#-b	Increase the BED/GFF/VCF entry by the same number base pairs in each direction. Integer.
+#-l	The number of base pairs to subtract from the start coordinate. Integer.
+#-r	The number of base pairs to add to the end coordinate. Integer.
+#-s	Define -l and -r based on strand. For example. if used, -l 500 for a negative-stranded feature, it will add 500 bp to the end coordinate.
+#-pct	Define -l and -r as a fraction of the feature’s length. E.g. if used on a 1000bp feature, -l 0.50, will add 500 bp “upstream”. Default = false.
+
+
 rule bedtools_getfasta:
     input: 
         fasta= lambda w: reffiles[w.refname]["fasta"],
