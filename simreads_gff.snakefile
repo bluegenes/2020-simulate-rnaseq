@@ -1,7 +1,10 @@
+"""
+Author: N Tessa Pierce, UC Davis Lab for Data Intensive Biology
+Run: snakemake -s simreads_gff.snakefile --use-conda --configfiles config/Hsapiens_ensembl.yml
+"""
 # tiny snake to simulate reads from given genome/gene names + gff
 
 #quest_for_orthologs_data: no gff3/bed, so can't use this?
-#human genome data:
 
 outdir = "output_simreads"
 datadir = os.path.join(outdir, "data")
