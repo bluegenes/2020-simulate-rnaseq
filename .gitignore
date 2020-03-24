@@ -1,0 +1,11 @@
+*.fasta
+*.gff*
+*gtf
+.DS_Store
+.RData
+*.tar.gz
+.snakemake/
+.ipynb_checkpoints/
+Homo_sapiens/
+QfO_release_2019_04/
+output_simreads/

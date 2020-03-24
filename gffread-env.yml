@@ -1,0 +1,8 @@
+name: gffread-env
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - gffread=0.11.7
+  - samtools=1.10
