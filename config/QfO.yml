@@ -1,0 +1,31 @@
+# config file for simulating reads from QfO
+
+reference_files:
+  QfO_Hsapiens_DNA:
+    fasta: /Users/tessa/dib-lab/simulate_reads/QfO_release_2019_04/Eukaryota/UP000005640_9606_DNA.fasta
+  QfO_Hsapiens_additional:
+    fasta: /Users/tessa/dib-lab/simulate_reads/QfO_release_2019_04/Eukaryota/UP000005640_9606_additional.fasta
+
+
+#UP000005640_9606.fasta
+#UP000005640_9606.gene2acc
+#UP000005640_9606.idmapping
+#UP000005640_9606.xml
+#UP000005640_9606_DNA.fasta
+#UP000005640_9606_DNA.miss
+#UP000005640_9606_additional.fasta
+#UP000005640_9606_gcoord.miss
+#UP000005640_9606_gcoord.xml
+
+# odb10v1_gene_xrefs.tab.gz:        UniProt, ENSEMBL, NCBI, GO and InterPro ids associated with Ortho DB gene
+# odb10v1_OGs.tab.gz:           Ortho DB orthologous groups
+# odb10v1_OG_xrefs.tab.gz:      OG associations with GO, COG and InterPro ids
+# odb10v1_genes.tab.gz:         Ortho DB genes with some info
+# odb10v1_level2species.tab.gz: correspondence between level ids and species ids
+# odb10v1_species.tab.gz:       Ortho DB individual organism (aka species) ids based on NCBI taxonomy ids (mostly species level)
+
+simulation_params:
+  read_len: 150
+  paired: False
+  num_rep: 5
+  num_reads_per_transcript: 1000

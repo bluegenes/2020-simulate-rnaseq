@@ -1,4 +1,4 @@
-# config file for simulating reads
+# config file for simulating reads from Human Ensembl Data
 
 reference_files:
   Hsapiens_ensembl:
@@ -13,6 +13,10 @@ attributes:
     - CSF2RA
     - GNRHR
     - XBP1
+
+# add flank # base pairs upstream and downstream of gene
+flank_bp: 50
+slop_bp: 50
 
 simulation_params:
   read_len: 150
