@@ -3,7 +3,9 @@
 reference_files:
   Hsapiens_ensembl:
     fasta: "/Users/tessa/dib-lab/simulate_reads/Homo_sapiens/Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa"
-    gff: "/Users/tessa/dib-lab/simulate_reads/Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf"
+    genome_info: "/Users/tessa/dib-lab/simulate_reads/Homo_sapiens/Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa.fai"
+    #gff: "/Users/tessa/dib-lab/simulate_reads/Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf"
+    gff: "/Users/tessa/dib-lab/simulate_reads/chromosomes.gff3"
 
 attributes:
   gene_name:

@@ -14,7 +14,7 @@ library(BSgenome)
 
 subset_fasta <- snakemake@input[[1]]
 output_dir <- snakemake@params[["output_dir"]]
-
+print(output_dir)
 num_reps <- as.integer(snakemake@params[["num_reps"]]) # 5
 print(num_reps)
 read_length <- as.integer(snakemake@params[["read_length"]]) # 150

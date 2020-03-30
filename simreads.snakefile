@@ -29,8 +29,8 @@ if attribute_info:
         # build reverse dictionary, so we can get the attribute name from the value
         for val in attribute_info[attr]:
             attributeD[val] = attr
-    attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "sample_01.fasta"), gene=attributeD.keys(), ref="Hsapiens_ensembl")
-    # add flanking sequences (or slop) --> not actually enabled yet
+    attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "sample_01.fasta"), gene=attributeD.keys(), ref=reffiles.keys())
+    # add flanking sequences (or slop)
     if flank:
         attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "flank{flank}", "sample_01.fasta"), gene=attributeD.keys(), ref=reffiles.keys(), flank=flank)
     if slop:
@@ -48,19 +48,18 @@ rule filter_gff:
     params:
         attribute_to_filter_on=lambda w: attributeD[w.gene_name],
         attribute_value=lambda w: w.gene_name,
-    #wildcard_constraints:
-    #    refname="[^\/]",
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     log: os.path.join(logsdir, "{refname}", "{gene_name}.filter_gff.log")
     conda: "polyester-env.yml"
     script: "filter_gff.R"
 
-# right now we're getting the exact matching range. to do: add flank or slop to get (or add) regions around these genes
 # flank gets the regions around the features, excluding the features themselves. 
-# slop gets the regions around the features INCLUDING the features themselves
-
 rule bedtools_flank:
     input:
         fasta= lambda w: reffiles[w.refname]["fasta"],
+        genome_info=lambda w: reffiles[w.refname]["genome_info"],
         gff=rules.filter_gff.output
     output: 
         gff=os.path.join(datadir, "{refname}", "{gene_name}.flank{flank}.gff"),
@@ -69,22 +68,28 @@ rule bedtools_flank:
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.flank{flank}.get_fasta.benchmark")
     params:
         flank= lambda w: w.flank,
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     conda: "bedtools-env.yml"
     shell:
         """
-        bedtools flank -b {params.flank} -i {input.gff} -g {input.fasta} > {output.gff} 2> {log}
+        bedtools flank -b {params.flank} -i {input.gff} -g {input.genome_info} > {output.gff} 2> {log}
         bedtools getfasta -fi {input.fasta} -bed {output.gff} > {output.fasta} 2>> {log}
         """
 
+# flank/slop options:
 #-b	Increase the BED/GFF/VCF entry by the same number base pairs in each direction. Integer.
 #-l	The number of base pairs to subtract from the start coordinate. Integer.
 #-r	The number of base pairs to add to the end coordinate. Integer.
 #-s	Define -l and -r based on strand. For example. if used, -l 500 for a negative-stranded feature, it will add 500 bp to the end coordinate.
 #-pct	Define -l and -r as a fraction of the feature’s length. E.g. if used on a 1000bp feature, -l 0.50, will add 500 bp “upstream”. Default = false.
 
+# slop gets the regions around the features INCLUDING the features themselves
 rule bedtools_slop:
     input:
         fasta= lambda w: reffiles[w.refname]["fasta"],
+        genome_info=lambda w: reffiles[w.refname]["genome_info"],
         gff=rules.filter_gff.output
     output:
         gff=os.path.join(datadir, "{refname}", "{gene_name}.slop{slop}.gff"),
@@ -93,10 +98,13 @@ rule bedtools_slop:
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.slop{slop}.get_fasta.benchmark")
     params:
         slop= lambda w: w.slop,
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     conda: "bedtools-env.yml"
     shell:
         """
-        bedtools slop -b {params.slop} -i {input.gff} -g {input.fasta} > {output.gff} 2> {log}
+        bedtools slop -b {params.slop} -i {input.gff} -g {input.genome_info} > {output.gff} 2> {log}
         bedtools getfasta -fi {input.fasta} -bed {output.gff} > {output.fasta} 2>> {log}
         """
 
@@ -108,8 +116,8 @@ rule bedtools_getfasta:
     log: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.log")
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.benchmark")
     wildcard_constraints:
-        refname="[^\/]",
-        gene_name="[!flank]",#[^\.] #^((?!badword).)*$
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     conda: "bedtools-env.yml"
     shell: 
         """
@@ -124,14 +132,14 @@ rule polyester_simreads_gene:
     input: rules.bedtools_getfasta.output
     output: os.path.join(simdir, "{refname}", "{gene_name}", "sample_01.fasta")
     params:
-        output_dir = lambda w: os.path.abspath(os.path.join(simdir, w.refname, w.gene_name)),
+        output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name),
         num_reps = sim_config.get("num_reps", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
-    #wildcard_constraints:
-        #refname="[^\/]",
-        #gene_name="[!flank]",#[^\.] #^((?!badword).)*$
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     log: os.path.join(logsdir, "{refname}_{gene_name}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.simreads.benchmark")
     conda: "polyester-env.yml" 
@@ -141,13 +149,16 @@ rule polyester_simreads_flank:
     input: rules.bedtools_flank.output.fasta 
     output: os.path.join(simdir, "{refname}", "{gene_name}", "flank{flank}", "sample_01.fasta")
     params:
-        output_dir = lambda w: os.path.abspath(os.path.join(simdir, w.refname, f"{w.gene_name}.flank{w.flank}")),
+        output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name, f"flank{w.flank}"),
         num_reps = sim_config.get("num_reps", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}_{gene_name}.flank{flank}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.flank{flank}.simreads.benchmark")
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     conda: "polyester-env.yml"
     script: "simulate_reads.R"
 
@@ -155,13 +166,16 @@ rule polyester_simreads_slop:
     input: rules.bedtools_slop.output.fasta 
     output: os.path.join(simdir, "{refname}", "{gene_name}", "slop{slop}", "sample_01.fasta")
     params:
-        output_dir = lambda w: os.path.abspath(os.path.join(simdir, w.refname, f"{w.gene_name}.slop{w.slop}")),
+        output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name, f"slop{w.slop}"),
         num_reps = sim_config.get("num_reps", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}_{gene_name}.slop{slop}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.slop{slop}.simreads.benchmark")
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     conda: "polyester-env.yml"
     script: "simulate_reads.R"
 
@@ -176,6 +190,9 @@ rule polyester_simreads_full:
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}.simreads.benchmark")
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+"
     conda: "polyester-env.yml"
     script: "simulate_reads.R"
 
