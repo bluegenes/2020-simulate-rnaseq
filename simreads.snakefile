@@ -5,36 +5,41 @@ Run: snakemake -s simreads.snakefile --use-conda --configfiles config/Hsapiens_e
 # tiny snake to simulate reads from given genome/gene names + gff
 
 #quest_for_orthologs_data: no gff3/bed - currently just simulate from entire file. Might want to subset somehow instead...
-
-outdir = "output_simreads"
+outdir = config.get("output_directory","output_simreads")
 datadir = os.path.join(outdir, "data")
 simdir = os.path.join(outdir, "simulate_reads")
 logsdir = os.path.join(outdir, "logs")
 
 # use config to specify files, gene names
 reffiles = config["reference_files"]
+
 flank = config.get("flank_bp")
 slop = config.get("slop_bp")
 
 full = config.get("full", False)
 full_target=[]
 
+# get polyester parameters from config; use replicates to build rep sample numbers
+sim_config = config.get("simulation_params")
+#replist = list(range(sim_config.get("num_reps", 5)))
+replist = ["01","02","03","04","05"]
+
 attribute_info=config.get("attributes")
 attribute_targets=[]
-if full:
-    full_target = expand(os.path.join(simdir, "{ref}", "sample_01.fasta"), ref=reffiles.keys()), # full sequence target
+if any([not attribute_info, full]):
+    full_target = expand(os.path.join(simdir, "{ref}", "sample_{rep}.fq.gz"), ref=reffiles.keys(), rep=replist), # full sequence target
 if attribute_info:
     attributeD = {}
     for attr in attribute_info.keys():
         # build reverse dictionary, so we can get the attribute name from the value
         for val in attribute_info[attr]:
             attributeD[val] = attr
-    attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "sample_01.fasta"), gene=attributeD.keys(), ref=reffiles.keys())
+    attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "sample_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), rep=replist)
     # add flanking sequences (or slop)
     if flank:
-        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "flank{flank}", "sample_01.fasta"), gene=attributeD.keys(), ref=reffiles.keys(), flank=flank)
+        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "flank{flank}", "sample_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), flank=flank, rep=replist)
     if slop:
-        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "slop{slop}", "sample_01.fasta"), gene=attributeD.keys(), ref=reffiles.keys(), slop=slop)
+        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "slop{slop}", "sample_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), slop=slop, rep=replist)
 
 rule all:
     input: 
@@ -43,35 +48,37 @@ rule all:
 
 # using R and filtering individually is slow and unnecessary. maybe switch to biopython and grab all attributes with a single passthrough
 rule filter_gff:
-    input: lambda w: reffiles[w.refname]["gff"]
-    output: os.path.join(datadir, "{refname}", "{gene_name}.gff3")
+    input: 
+        gff= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["gff"]),
+    output: os.path.join(datadir, "{refname}", "filtered", "{gene_name}.gff3")
     params:
         attribute_to_filter_on=lambda w: attributeD[w.gene_name],
         attribute_value=lambda w: w.gene_name,
+    log: os.path.join(logsdir, "filter_gff", "{refname}_{gene_name}.filter_gff.log")
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    log: os.path.join(logsdir, "{refname}", "{gene_name}.filter_gff.log")
-    conda: "polyester-env.yml"
-    script: "filter_gff.R"
+    conda: "envs/polyester-env.yml"
+    script: "scripts/filter_gff.R"
 
 # flank gets the regions around the features, excluding the features themselves. 
 rule bedtools_flank:
     input:
-        fasta= lambda w: reffiles[w.refname]["fasta"],
-        genome_info=lambda w: reffiles[w.refname]["genome_info"],
+        fasta= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"]),
+        genome_info= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
         gff=rules.filter_gff.output
     output: 
-        gff=os.path.join(datadir, "{refname}", "{gene_name}.flank{flank}.gff"),
-        fasta=os.path.join(datadir, "{refname}", "{gene_name}.flank{flank}.fasta")
+        gff=os.path.join(datadir, "{refname}", "filtered", "{gene_name}.flank{flank}.gff"),
+        fasta=os.path.join(datadir, "{refname}", "filtered", "{gene_name}.flank{flank}.fasta")
     log: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.flank{flank}.get_fasta.log")
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.flank{flank}.get_fasta.benchmark")
     params:
         flank= lambda w: w.flank,
+        #genome_info= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    conda: "bedtools-env.yml"
+    conda: "envs/bedtools-env.yml"
     shell:
         """
         bedtools flank -b {params.flank} -i {input.gff} -g {input.genome_info} > {output.gff} 2> {log}
@@ -88,20 +95,21 @@ rule bedtools_flank:
 # slop gets the regions around the features INCLUDING the features themselves
 rule bedtools_slop:
     input:
-        fasta= lambda w: reffiles[w.refname]["fasta"],
-        genome_info=lambda w: reffiles[w.refname]["genome_info"],
+        fasta= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"]),
+        genome_info=lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
         gff=rules.filter_gff.output
     output:
-        gff=os.path.join(datadir, "{refname}", "{gene_name}.slop{slop}.gff"),
-        fasta=os.path.join(datadir, "{refname}", "{gene_name}.slop{slop}.fasta")
+        gff=os.path.join(datadir, "{refname}", "filtered", "{gene_name}.slop{slop}.gff"),
+        fasta=os.path.join(datadir, "{refname}", "filtered", "{gene_name}.slop{slop}.fasta")
     log: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.slop{slop}.get_fasta.log")
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.slop{slop}.get_fasta.benchmark")
     params:
         slop= lambda w: w.slop,
+        #genome_info= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    conda: "bedtools-env.yml"
+    conda: "envs/bedtools-env.yml"
     shell:
         """
         bedtools slop -b {params.slop} -i {input.gff} -g {input.genome_info} > {output.gff} 2> {log}
@@ -110,27 +118,26 @@ rule bedtools_slop:
 
 rule bedtools_getfasta:
     input: 
-        fasta= lambda w: reffiles[w.refname]["fasta"],
+        fasta= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"]),
+        #fasta=os.path.join(datadir, "{refname}", "{refname}.fasta"),
         gff=rules.filter_gff.output
-    output: os.path.join(datadir, "{refname}", "{gene_name}.fasta")
+    output: os.path.join(datadir, "{refname}", "filtered", "{gene_name}.fasta")
     log: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.log")
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.benchmark")
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    conda: "bedtools-env.yml"
+    conda: "envs/bedtools-env.yml"
     shell: 
         """
         bedtools getfasta -fi {input.fasta} -bed {input.gff} > {output} 2> {log}
         """
 
-# get polyester parameters from config
-sim_config = config.get("simulation_params")
 
 # simulation rules
 rule polyester_simreads_gene:
     input: rules.bedtools_getfasta.output
-    output: os.path.join(simdir, "{refname}", "{gene_name}", "sample_01.fasta")
+    output: expand(os.path.join(simdir, "{{refname}}", "{{gene_name}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name),
         num_reps = sim_config.get("num_reps", 5),
@@ -142,12 +149,12 @@ rule polyester_simreads_gene:
         gene_name="\w+"
     log: os.path.join(logsdir, "{refname}_{gene_name}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.simreads.benchmark")
-    conda: "polyester-env.yml" 
-    script: "simulate_reads.R"
+    conda: "envs/polyester-env.yml" 
+    script: "scripts/simulate_reads.R"
 
 rule polyester_simreads_flank:
     input: rules.bedtools_flank.output.fasta 
-    output: os.path.join(simdir, "{refname}", "{gene_name}", "flank{flank}", "sample_01.fasta")
+    output: expand(os.path.join(simdir, "{{refname}}", "{{gene_name}}", "flank{{flank}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name, f"flank{w.flank}"),
         num_reps = sim_config.get("num_reps", 5),
@@ -159,12 +166,12 @@ rule polyester_simreads_flank:
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    conda: "polyester-env.yml"
-    script: "simulate_reads.R"
+    conda: "envs/polyester-env.yml"
+    script: "scripts/simulate_reads.R"
 
 rule polyester_simreads_slop:
     input: rules.bedtools_slop.output.fasta 
-    output: os.path.join(simdir, "{refname}", "{gene_name}", "slop{slop}", "sample_01.fasta")
+    output: expand(os.path.join(simdir, "{{refname}}", "{{gene_name}}", "slop{{slop}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name, f"slop{w.slop}"),
         num_reps = sim_config.get("num_reps", 5),
@@ -176,12 +183,12 @@ rule polyester_simreads_slop:
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    conda: "polyester-env.yml"
-    script: "simulate_reads.R"
+    conda: "envs/polyester-env.yml"
+    script: "scripts/simulate_reads.R"
 
 rule polyester_simreads_full:
-    input: lambda w: reffiles[w.refname]["fasta"]
-    output: os.path.join(simdir, "{refname}", "sample_01.fasta")
+    input: lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"])
+    output: expand(os.path.join(simdir, "{{refname}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.abspath(os.path.join(simdir, w.refname)),
         num_reps = sim_config.get("num_reps", 5),
@@ -193,14 +200,27 @@ rule polyester_simreads_full:
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+"
-    conda: "polyester-env.yml"
-    script: "simulate_reads.R"
+    conda: "envs/polyester-env.yml"
+    script: "scripts/simulate_reads.R"
 
-#rule download_QfO_2018:
-#    output: os.path.join(datadir, "QfO_release_2018_04.tar.gz")
-#    log: os.path.join(logs_dir, "QfO.download")
-#    shell:
-#        """
-#        curl -L ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz -O {output}
-#        """
+rule seqtk_fasta_to_fastq:
+    input: os.path.join(simdir, "{refname}", "{sample}_{rep}.fasta.gz")
+    output: os.path.join(simdir, "{refname}", "{sample}_{rep}.fq.gz")
+    params:
+        output_dir = lambda w: os.path.join(simdir, w.refname),
+        num_reps = sim_config.get("num_reps", 5),
+        read_length = sim_config.get("read_length", 150),
+        simulate_paired = sim_config.get("paired", False),
+        num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
+    log: os.path.join(logsdir, "seqtk", "{refname}_{sample}_{rep}.seqtk.log")
+    benchmark: os.path.join(logsdir, "seqtk", "{refname}_{sample}_{rep}.seqtk.benchmark")
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+",
+        rep="\d+"
+    conda: "envs/seqtk-env.yml"
+    shell:
+        """
+        seqtk seq -F 'I' {input} | gzip -9 > {output}
+        """
 

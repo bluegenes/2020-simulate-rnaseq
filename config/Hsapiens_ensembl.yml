@@ -9,13 +9,19 @@
     # export(filtered, "chromosomes.gff3")
 
 reference_files:
-  Hsapiens_ensembl:
-    fasta: "Homo_sapiens/Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa"
-    genome_info: "Homo_sapiens/Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa.fai"
-    gff: "chromosomes.gff3" 
-    #gff: "Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf"
+  Homo_sapiens_Ensembl_GRCh37:
+    # use annotated gene sets from igenomes http://ccb.jhu.edu/software/tophat/igenomes.shtml
+    database_url: "ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/Ensembl/GRCh37/Homo_sapiens_Ensembl_GRCh37.tar.gz"
+    database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
+    #database: "Homo_sapiens_Ensembl_GRCh37"
+    # relative paths to files within the database
+    fasta: "Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa"
+    #gff: "Ensembl/GRCh37/Annotation/Genes/genes.gtf"
+    genome_info: "Ensembl/GRCh37/Sequence/WholeGenomeFasta/genome.fa.fai"
+    gff: "chromosomes.gff3"
 
 attributes:
+  #full_genome: False
   #atm only gene_name enabled, modify filter_gff.R to enable additional attributes
   gene_name:
     - GNAS
@@ -34,5 +40,5 @@ slop_bp: 50 # includes feature itself
 simulation_params:
   read_len: 150
   paired: False
-  num_rep: 5
+  num_replicates: 5
   num_reads_per_transcript: 1000

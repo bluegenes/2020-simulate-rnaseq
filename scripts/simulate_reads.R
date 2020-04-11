@@ -35,4 +35,4 @@ head(fastaStrSet)
 countmat = matrix(reads_per_tx, nrow=length(readDNAStringSet(subset_fasta)), ncol=num_reps)
 print(countmat)
 # simulate reads
-simulate_experiment_countmat(fasta=subset_fasta, readmat=countmat, reportCoverage=TRUE, readlen=read_length, paired=paired, outdir=output_dir)
+simulate_experiment_countmat(fasta=subset_fasta, readmat=countmat, reportCoverage=TRUE, readlen=read_length, paired=paired, outdir=output_dir, gzip=TRUE)

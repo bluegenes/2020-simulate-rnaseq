@@ -10,13 +10,14 @@ sink(log, type="message")
 library(rtracklayer)
 #library(BSgenome)
 
-full_gff <- snakemake@input[[1]]
+full_gff <- snakemake@input[["gff"]]
 output_gff <- snakemake@output[[1]]
 
 attribute <- snakemake@params[["attribute_to_filter_on"]]
 print(attribute)
 attribute_value <- snakemake@params[["attribute_value"]]
 print(attribute_value)
+#filter_chromosomes <- snakemake@params[["filter_chromosomes"]]
 
 # 1. Filter full gff and write temp subset gff
 # read in gff (uses rtracklayer library)

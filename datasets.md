@@ -24,3 +24,18 @@ Ensembl Genomes
 Annotated gene expression sets:
   - http://ccb.jhu.edu/software/tophat/igenomes.shtml
 
+
+## Ensembl 
+http://uswest.ensembl.org/Homo_sapiens/Info/Index
+
+### fasta
+ftp://ftp.ensembl.org/pub/release-99/fasta/homo_sapiens/
+ftp://ftp.ensembl.org/pub/release-99/fasta/homo_sapiens/cds/Homo_sapiens.GRCh38.cds.all.fa.gz
+ftp://ftp.ensembl.org/pub/release-99/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.toplevel.fa.gz
+ftp://ftp.ensembl.org/pub/release-99/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
+ftp://ftp.ensembl.org/pub/release-99/fasta/homo_sapiens/pep/Homo_sapiens.GRCh38.pep.all.fa.gz
+
+### gff3
+ftp://ftp.ensembl.org/pub/release-99/gff3/homo_sapiens/Homo_sapiens.GRCh38.99.gff3.gz
+ftp://ftp.ensembl.org/pub/release-99/gff3/homo_sapiens/Homo_sapiens.GRCh38.99.chr.gff3.gz
+ftp://ftp.ensembl.org/pub/release-99/gff3/homo_sapiens/Homo_sapiens.GRCh38.99.abinitio.gff3.gz

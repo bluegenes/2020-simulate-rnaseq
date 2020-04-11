@@ -1,10 +1,15 @@
 # config file for simulating reads from QfO
 
 reference_files:
-  QfO_Hsapiens_DNA:
-    fasta: /Users/tessa/dib-lab/simulate_reads/QfO_release_2019_04/Eukaryota/UP000005640_9606_DNA.fasta
-  QfO_Hsapiens_additional:
-    fasta: /Users/tessa/dib-lab/simulate_reads/QfO_release_2019_04/Eukaryota/UP000005640_9606_additional.fasta
+  QfO_release_2018_04:
+   #name: QfO_release_2018_04.tar.gz
+    database_url: "ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz"
+    database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
+    fasta: QfO_release_2018_04/Eukaryota/UP000005640_9606_DNA.fasta
+  #QfO_Hsapiens_additional:
+  #  database_url: "ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz"
+  #  database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
+  #  fasta: QfO_release_2018_04/Eukaryota/UP000005640_9606_additional.fasta
 
 
 #UP000005640_9606.fasta
@@ -27,5 +32,5 @@ reference_files:
 simulation_params:
   read_len: 150
   paired: False
-  num_rep: 5
+  num_replicates: 5
   num_reads_per_transcript: 1000

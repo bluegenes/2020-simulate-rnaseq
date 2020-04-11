@@ -1,0 +1,13 @@
+name: rsubread-env
+channels:
+  - r
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r::r-base=3.6.1
+  - r::r-essentials=3.6.0
+  - bioconda::bioconductor-rsubread
+  - conda-forge::jupyterlab
+  - bioconda::bioconductor-rtracklayer
+  - bioconda::bioconductor-bsgenome
