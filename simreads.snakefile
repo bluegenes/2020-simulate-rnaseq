@@ -27,19 +27,19 @@ replist = ["01","02","03","04","05"]
 attribute_info=config.get("attributes")
 attribute_targets=[]
 if any([not attribute_info, full]):
-    full_target = expand(os.path.join(simdir, "{ref}", "sample_{rep}.fq.gz"), ref=reffiles.keys(), rep=replist), # full sequence target
+    full_target = expand(os.path.join(simdir, "{ref}", "{ref}_{rep}.fq.gz"), ref=reffiles.keys(), rep=replist), # full sequence target
 if attribute_info:
     attributeD = {}
     for attr in attribute_info.keys():
         # build reverse dictionary, so we can get the attribute name from the value
         for val in attribute_info[attr]:
             attributeD[val] = attr
-    attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "sample_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), rep=replist)
+    attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "{gene}_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), rep=replist)
     # add flanking sequences (or slop)
     if flank:
-        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "flank{flank}", "sample_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), flank=flank, rep=replist)
+        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "flank{flank}", "{gene}_flank{flank}_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), flank=flank, rep=replist)
     if slop:
-        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "slop{slop}", "sample_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), slop=slop, rep=replist)
+        attribute_targets+=expand(os.path.join(simdir, "{ref}", "{gene}", "slop{slop}", "{gene}_slop{slop}_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), slop=slop, rep=replist)
 
 rule all:
     input: 
@@ -203,20 +203,65 @@ rule polyester_simreads_full:
     conda: "envs/polyester-env.yml"
     script: "scripts/simulate_reads.R"
 
-rule seqtk_fasta_to_fastq:
-    input: os.path.join(simdir, "{refname}", "{sample}_{rep}.fasta.gz")
-    output: os.path.join(simdir, "{refname}", "{sample}_{rep}.fq.gz")
+# here sample is unconstrained, allowing it to match everything, refname/sample AND refname/gene/sample_01 AND refname/gene/flank50/sample_01
+# sigh. this is convenient, but also does not enable easy renaming
+rule seqtk_fasta_to_fastq_full:
+    input: os.path.join(simdir, "{refname}", "sample_{rep}.fasta.gz")
+    output: os.path.join(simdir, "{refname}", "{refname}_full_{rep}.fq.gz")
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname),
         num_reps = sim_config.get("num_reps", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
-    log: os.path.join(logsdir, "seqtk", "{refname}_{sample}_{rep}.seqtk.log")
-    benchmark: os.path.join(logsdir, "seqtk", "{refname}_{sample}_{rep}.seqtk.benchmark")
+    log: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.log")
+    benchmark: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.benchmark")
     wildcard_constraints:
         refname="\w+", # ~only allow letters,numbers, underscore
         gene_name="\w+",
+        rep="\d+"
+    conda: "envs/seqtk-env.yml"
+    shell:
+        """
+        seqtk seq -F 'I' {input} | gzip -9 > {output}
+        """
+
+rule seqtk_fasta_to_fastq_attribute:
+    input: os.path.join(simdir, "{refname}", "{gene_name}", "sample_{rep}.fasta.gz")
+    output: os.path.join(simdir, "{refname}", "{gene_name}", "{gene_name}_{rep}.fq.gz")
+    params:
+        output_dir = lambda w: os.path.join(simdir, w.refname),
+        num_reps = sim_config.get("num_reps", 5),
+        read_length = sim_config.get("read_length", 150),
+        simulate_paired = sim_config.get("paired", False),
+        num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
+    log: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{rep}.seqtk.log")
+    benchmark: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{rep}.seqtk.benchmark")
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+",
+        rep="\d+"
+    conda: "envs/seqtk-env.yml"
+    shell:
+        """
+        seqtk seq -F 'I' {input} | gzip -9 > {output}
+        """
+
+rule seqtk_fasta_to_fastq_extrainfo:
+    input: os.path.join(simdir, "{refname}", "{gene_name}",  "{extrainfo}", "sample_{rep}.fasta.gz")
+    output: os.path.join(simdir, "{refname}","{gene_name}",  "{extrainfo}", "{gene_name}_{extrainfo}_{rep}.fq.gz")
+    params:
+        output_dir = lambda w: os.path.join(simdir, w.refname),
+        num_reps = sim_config.get("num_reps", 5),
+        read_length = sim_config.get("read_length", 150),
+        simulate_paired = sim_config.get("paired", False),
+        num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
+    log: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{extrainfo}_{rep}.seqtk.log")
+    benchmark: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{extrainfo}_{rep}.seqtk.benchmark")
+    wildcard_constraints:
+        refname="\w+", # ~only allow letters,numbers, underscore
+        gene_name="\w+",
+        extrainfo="\w+",
         rep="\d+"
     conda: "envs/seqtk-env.yml"
     shell:
