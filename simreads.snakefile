@@ -19,10 +19,20 @@ slop = config.get("slop_bp")
 full = config.get("full", False)
 full_target=[]
 
+## polyester creates files called "sample_01.fasta.gz", sample_02.fasta.gz", etc
+def generate_replist(number_replicates):
+    replist = list(range(number_replicates))
+    reps=[]
+    for num in replist:
+        num+=1 # start at 1
+        if num < 10:
+            num = "0" + str(num)
+        reps.append(str(num))
+    return reps
+
 # get polyester parameters from config; use replicates to build rep sample numbers
 sim_config = config.get("simulation_params")
-#replist = list(range(sim_config.get("num_reps", 5)))
-replist = ["01","02","03","04","05"]
+replist = generate_replist(sim_config.get("num_replicates", 5))
 
 attribute_info=config.get("attributes")
 attribute_targets=[]
@@ -31,7 +41,7 @@ if any([not attribute_info, full]):
 if attribute_info:
     attributeD = {}
     for attr in attribute_info.keys():
-        # build reverse dictionary, so we can get the attribute name from the value
+        # build reverse dictionary, so we can get the attribute name from the value in rule params
         for val in attribute_info[attr]:
             attributeD[val] = attr
     attribute_targets=expand(os.path.join(simdir, "{ref}", "{gene}", "{gene}_{rep}.fq.gz"), gene=attributeD.keys(), ref=reffiles.keys(), rep=replist)
@@ -74,9 +84,8 @@ rule bedtools_flank:
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.flank{flank}.get_fasta.benchmark")
     params:
         flank= lambda w: w.flank,
-        #genome_info= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     conda: "envs/bedtools-env.yml"
     shell:
@@ -107,7 +116,7 @@ rule bedtools_slop:
         slop= lambda w: w.slop,
         #genome_info= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     conda: "envs/bedtools-env.yml"
     shell:
@@ -125,7 +134,7 @@ rule bedtools_getfasta:
     log: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.log")
     benchmark: os.path.join(logsdir, "bedtools", "{refname}", "{gene_name}.get_fasta.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     conda: "envs/bedtools-env.yml"
     shell: 
@@ -140,12 +149,12 @@ rule polyester_simreads_gene:
     output: expand(os.path.join(simdir, "{{refname}}", "{{gene_name}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name),
-        num_reps = sim_config.get("num_reps", 5),
+        num_reps = sim_config.get("num_replicates", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     log: os.path.join(logsdir, "{refname}_{gene_name}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.simreads.benchmark")
@@ -157,14 +166,14 @@ rule polyester_simreads_flank:
     output: expand(os.path.join(simdir, "{{refname}}", "{{gene_name}}", "flank{{flank}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name, f"flank{w.flank}"),
-        num_reps = sim_config.get("num_reps", 5),
+        num_reps = sim_config.get("num_replicates", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}_{gene_name}.flank{flank}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.flank{flank}.simreads.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     conda: "envs/polyester-env.yml"
     script: "scripts/simulate_reads.R"
@@ -174,14 +183,14 @@ rule polyester_simreads_slop:
     output: expand(os.path.join(simdir, "{{refname}}", "{{gene_name}}", "slop{{slop}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.join(simdir, w.refname, w.gene_name, f"slop{w.slop}"),
-        num_reps = sim_config.get("num_reps", 5),
+        num_reps = sim_config.get("num_replicates", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}_{gene_name}.slop{slop}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}_{gene_name}.slop{slop}.simreads.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     conda: "envs/polyester-env.yml"
     script: "scripts/simulate_reads.R"
@@ -191,33 +200,25 @@ rule polyester_simreads_full:
     output: expand(os.path.join(simdir, "{{refname}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.abspath(os.path.join(simdir, w.refname)),
-        num_reps = sim_config.get("num_reps", 5),
+        num_reps = sim_config.get("num_replicates", 5),
         read_length = sim_config.get("read_length", 150),
         simulate_paired = sim_config.get("paired", False),
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}.simreads.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+"
     conda: "envs/polyester-env.yml"
     script: "scripts/simulate_reads.R"
 
-# here sample is unconstrained, allowing it to match everything, refname/sample AND refname/gene/sample_01 AND refname/gene/flank50/sample_01
-# sigh. this is convenient, but also does not enable easy renaming
 rule seqtk_fasta_to_fastq_full:
     input: os.path.join(simdir, "{refname}", "sample_{rep}.fasta.gz")
     output: os.path.join(simdir, "{refname}", "{refname}_full_{rep}.fq.gz")
-    params:
-        output_dir = lambda w: os.path.join(simdir, w.refname),
-        num_reps = sim_config.get("num_reps", 5),
-        read_length = sim_config.get("read_length", 150),
-        simulate_paired = sim_config.get("paired", False),
-        num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.log")
     benchmark: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+",
         rep="\d+"
     conda: "envs/seqtk-env.yml"
@@ -229,16 +230,10 @@ rule seqtk_fasta_to_fastq_full:
 rule seqtk_fasta_to_fastq_attribute:
     input: os.path.join(simdir, "{refname}", "{gene_name}", "sample_{rep}.fasta.gz")
     output: os.path.join(simdir, "{refname}", "{gene_name}", "{gene_name}_{rep}.fq.gz")
-    params:
-        output_dir = lambda w: os.path.join(simdir, w.refname),
-        num_reps = sim_config.get("num_reps", 5),
-        read_length = sim_config.get("read_length", 150),
-        simulate_paired = sim_config.get("paired", False),
-        num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{rep}.seqtk.log")
     benchmark: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{rep}.seqtk.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+",
         rep="\d+"
     conda: "envs/seqtk-env.yml"
@@ -250,16 +245,10 @@ rule seqtk_fasta_to_fastq_attribute:
 rule seqtk_fasta_to_fastq_extrainfo:
     input: os.path.join(simdir, "{refname}", "{gene_name}",  "{extrainfo}", "sample_{rep}.fasta.gz")
     output: os.path.join(simdir, "{refname}","{gene_name}",  "{extrainfo}", "{gene_name}_{extrainfo}_{rep}.fq.gz")
-    params:
-        output_dir = lambda w: os.path.join(simdir, w.refname),
-        num_reps = sim_config.get("num_reps", 5),
-        read_length = sim_config.get("read_length", 150),
-        simulate_paired = sim_config.get("paired", False),
-        num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{extrainfo}_{rep}.seqtk.log")
     benchmark: os.path.join(logsdir, "seqtk", "{refname}_{gene_name}_{extrainfo}_{rep}.seqtk.benchmark")
     wildcard_constraints:
-        refname="\w+", # ~only allow letters,numbers, underscore
+        refname="\w+",
         gene_name="\w+",
         extrainfo="\w+",
         rep="\d+"
@@ -268,4 +257,3 @@ rule seqtk_fasta_to_fastq_extrainfo:
         """
         seqtk seq -F 'I' {input} | gzip -9 > {output}
         """
-
