@@ -32,7 +32,7 @@ attributes:
     - XBP1
 
 # flank or slop # base pairs upstream and downstream of gene.
-flank_bp: 50 # excludes feature itself (just surrounding bp)
+flank_bp: 150 # excludes feature itself (just surrounding bp)
 slop_bp: 50 # includes feature itself
 
 # parameters for polyester read simulation
