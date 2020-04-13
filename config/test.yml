@@ -1,0 +1,13 @@
+# config file for simulating reads from QfO
+
+data_directory: config
+
+reference_files:
+  test_ager:
+    fasta: test_ager.fasta
+
+simulation_params:
+  read_len: 150
+  paired: False
+  num_replicates: 5
+  num_reads_per_transcript: 1000

@@ -6,7 +6,8 @@ Run: snakemake -s simreads.snakefile --use-conda --configfiles config/Hsapiens_e
 
 #quest_for_orthologs_data: no gff3/bed - currently just simulate from entire file. Might want to subset somehow instead...
 outdir = config.get("output_directory","output_simreads")
-datadir = os.path.join(outdir, "data")
+datadir_default = os.path.join(outdir, "data")
+datadir = config.get("data_directory", datadir_default)
 simdir = os.path.join(outdir, "simulate_reads")
 logsdir = os.path.join(outdir, "logs")
 
@@ -59,7 +60,7 @@ rule all:
 # using R and filtering individually is slow and unnecessary. maybe switch to biopython and grab all attributes with a single passthrough
 rule filter_gff:
     input: 
-        gff= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["gff"]),
+        gff= lambda w: os.path.join(datadir, reffiles[w.refname]["gff"]),
     output: os.path.join(datadir, "{refname}", "filtered", "{gene_name}.gff3")
     params:
         attribute_to_filter_on=lambda w: attributeD[w.gene_name],
@@ -74,7 +75,7 @@ rule filter_gff:
 # flank gets the regions around the features, excluding the features themselves. 
 rule bedtools_flank:
     input:
-        fasta= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"]),
+        fasta= lambda w: os.path.join(datadir, reffiles[w.refname]["fasta"]),
         genome_info= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
         gff=rules.filter_gff.output
     output: 
@@ -104,7 +105,7 @@ rule bedtools_flank:
 # slop gets the regions around the features INCLUDING the features themselves
 rule bedtools_slop:
     input:
-        fasta= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"]),
+        fasta= lambda w: os.path.join(datadir, reffiles[w.refname]["fasta"]),
         genome_info=lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["genome_info"]),
         gff=rules.filter_gff.output
     output:
@@ -127,7 +128,7 @@ rule bedtools_slop:
 
 rule bedtools_getfasta:
     input: 
-        fasta= lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"]),
+        fasta= lambda w: os.path.join(datadir, reffiles[w.refname]["fasta"]),
         #fasta=os.path.join(datadir, "{refname}", "{refname}.fasta"),
         gff=rules.filter_gff.output
     output: os.path.join(datadir, "{refname}", "filtered", "{gene_name}.fasta")
@@ -196,7 +197,7 @@ rule polyester_simreads_slop:
     script: "scripts/simulate_reads.R"
 
 rule polyester_simreads_full:
-    input: lambda w: os.path.join(datadir, w.refname, reffiles[w.refname]["fasta"])
+    input: lambda w: os.path.join(datadir, reffiles[w.refname]["fasta"])
     output: expand(os.path.join(simdir, "{{refname}}", "sample_{rep}.fasta.gz"), rep = replist)
     params:
         output_dir = lambda w: os.path.abspath(os.path.join(simdir, w.refname)),
@@ -214,7 +215,7 @@ rule polyester_simreads_full:
 
 rule seqtk_fasta_to_fastq_full:
     input: os.path.join(simdir, "{refname}", "sample_{rep}.fasta.gz")
-    output: os.path.join(simdir, "{refname}", "{refname}_full_{rep}.fq.gz")
+    output: os.path.join(simdir, "{refname}", "{refname}_{rep}.fq.gz")
     log: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.log")
     benchmark: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.benchmark")
     wildcard_constraints:

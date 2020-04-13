@@ -1,15 +1,13 @@
 # config file for simulating reads from QfO
 
+data_directory: output_simreads/data
+
 reference_files:
-  QfO_release_2018_04:
+  QfO_Hsapiens_DNA:
    #name: QfO_release_2018_04.tar.gz
     database_url: "ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz"
     database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
     fasta: QfO_release_2018_04/Eukaryota/UP000005640_9606_DNA.fasta
-  #QfO_Hsapiens_additional:
-  #  database_url: "ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz"
-  #  database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
-  #  fasta: QfO_release_2018_04/Eukaryota/UP000005640_9606_additional.fasta
 
 
 #UP000005640_9606.fasta
