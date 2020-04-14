@@ -1,14 +1,52 @@
 # config file for simulating reads from QfO
 
-data_directory: output_simreads/data
+data_directory: output_simreads/data/QfO_release_2018_04/Eukaryota
 
+# first, do vertebrates (then all)
+#  download_link_base: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota
 reference_files:
-  QfO_Hsapiens_DNA:
-   #name: QfO_release_2018_04.tar.gz
-    database_url: "ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz"
-    database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
-    fasta: QfO_release_2018_04/Eukaryota/UP000005640_9606_DNA.fasta
-
+   #database name name: QfO_release_2018_04.tar.gz
+  Homo_sapiens_DNA:
+    #database_url: "ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/previous_releases/qfo_release-2018_04/QfO_release_2018_04.tar.gz"
+    #database_fileformat: "tar.gz" #tar.gz and .gz are valid fileformats
+    fasta: UP000005640_9606_DNA.fasta
+#    fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000005640_9606_DNA.fasta.gz
+  Bos_taurus_DNA:
+    fasta: UP000009136_9913_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000009136_9913_DNA.fasta.gz
+  Danio_rerio_DNA:
+    fasta: UP000000437_7955_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000000437_7955_DNA.fasta.gz
+  Canis_lupus_familiaris_DNA:
+    fasta: UP000002254_9615_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002254_9615_DNA.fasta.gz
+  Gallus_gallus_DNA:
+    fasta: UP000000539_9031_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000000539_9031_DNA.fasta.gz
+  Gorilla_gorilla_gorilla_DNA:
+    fasta: UP000001519_9595_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000001519_9595_DNA.fasta.gz
+  Lepisosteus_oculatus_DNA: #spotted gar
+    fasta: UP000018468_7918_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000018468_7918_DNA.fasta.gz
+  Monodelphis_domestica_DNA: #Gray short-tailed opossum
+    fasta: UP000002280_13616_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002280_13616_DNA.fasta.gz
+  Mus_musculus_DNA:
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000000589_10090_DNA.fasta.gz
+    fasta: UP000000589_10090_DNA.fasta
+  Oryzias_latipes_DNA: #Japanese killifish
+    fasta: UP000001038_8090_DNA.fasta 
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000001038_8090_DNA.fasta.gz
+  Pan_troglodytes_DNA: #Chimpanzee 
+    fasta: UP000002277_9598_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002277_9598_DNA.fasta.gz
+  Rattus_norvegicus_DNA: #Rat 
+    fasta: UP000002494_10116_DNA.fasta
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002494_10116_DNA.fasta.gz
+  Xenopus_tropicalis_DNA: #Western clawed frog /Silurana tropicalis
+    fasta: UP000008143_8364_DNA.fasta 
+    #fasta: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000008143_8364_DNA.fasta 
 
 #UP000005640_9606.fasta
 #UP000005640_9606.gene2acc

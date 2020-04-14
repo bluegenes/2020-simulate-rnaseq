@@ -23,13 +23,13 @@ To run, you'll need conda and snakemake > 5.10 installed.
 ## Simulate from all transcripts in a fasta file (no gff file required)
 
     """
-    snakemake -s simreads.snakefile --use-conda --configfiles config/QfO.yml
+    snakemake -s simreads.snakefile --use-conda --configfiles config/QfO.yml -p
     """
 
 ## Simulate only from certain features, gff required
       
     """    
-    snakemake -s simreads.snakefile --use-conda --configfiles config/Hsapiens_ensembl.yml
+    snakemake -s simreads.snakefile --use-conda --configfiles config/Hsapiens_ensembl.yml -p
     """
     
     Note: this is currently limited to the `gene_name` attribute, but can be modified for additional attributes
