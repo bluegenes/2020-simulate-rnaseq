@@ -1,0 +1,30 @@
+#samples_csv: gene_test.csv
+samples_csv: QfO_vertebrate_samples.csv
+
+sencha_params:
+  peptide_references:
+    sprot: /home/ntpierce/2020-pep/khtools_testing/uniprot_sprot.fasta.gz
+    Hsapiens_QfO: /home/ntpierce/2020-simulate-rnaseq/output_simreads/data/QfO_release_2018_04/Eukaryota/UP000005640_9606_DNA.fasta
+    merc: /home/ntpierce/2020-pep/khtools_testing/MERC.fasta.gz
+  alphabet:
+# reduce these to best defaults to start?
+    protein:
+      ksizes:
+        - 5
+        - 7
+        - 9
+    dayhoff:
+      ksizes:
+        - 9
+        - 11
+        - 13
+        - 15
+    hp:
+      ksizes:
+        - 21
+        - 25
+        - 27
+        - 29
+        - 31
+
+#khtools extract-coding --verbose --molecule {params.molecule} --peptide-ksize {wildcards.ksize} --noncoding-nucleotide-fasta {output.noncoding_nucl} --low-complexity-nucleotide-fasta {output.             low_complexity_nucl} --csv {output.csv} {input.pep_ref} {input.reads} > {output.coding_prot} 2> {log}
