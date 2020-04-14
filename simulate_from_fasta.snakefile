@@ -6,11 +6,6 @@ Run: snakemake -s simreads.snakefile --use-conda --configfiles config/Hsapiens_e
 
 import os
 
-from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
-HTTP = HTTPRemoteProvider()
-from snakemake.remote.FTP import RemoteProvider as FTPRemoteProvider
-FTP = FTPRemoteProvider()
-
 outdir = config.get("output_directory","output_simreads")
 datadir_default = os.path.join(outdir, "data")
 datadir = config.get("data_directory", datadir_default)
@@ -50,12 +45,15 @@ rule all:
     input: 
         expand(os.path.join(simdir, "{run_name}_samples.csv"), run_name = runname)
 
-
 rule download_fasta:
-    input: lambda w: FTP.remote(refLinks[w.refname], static=True, keep_local=True, immediate_close=True)
-    output: os.path.join(datadir,"{refname}.fa.gz")
-    log: os.path.join(logsdir,"get_data", "{refname}.log")
-    shell: "mv {input} {output} 2> {log}"
+    output: os.path.join(datadir, "{refname}.fa.gz")
+    params: 
+        download_link=lambda w: refLinks[w.refname]
+    log: os.path.join(logsdir, "get_data", "{refname}.log")
+    shell:
+        """
+        curl -L {params.download_link} -o {output} 2> {log}
+        """
 
 rule polyester_simreads_full:
     #input: lambda w: os.path.join(datadir, reffiles[w.refname]["fasta"])
