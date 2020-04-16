@@ -93,8 +93,9 @@ rule write_samples_csv:
     input: expand(os.path.join(simdir, "{ref}", "{ref}_{rep}.fq.gz"), ref=refLinks.keys(), rep=replist),
     output: os.path.join(simdir, "{run_name}_samples.csv")
     run:
-        with open(output, "w") as csv:
+        with open(str(output), "w") as csv:
             csv.write("sample_id" + "," + "read_1"+ "\n")
             for f in input:
-                refname = os.path.dirname(f)
-                csv.write(refname + "," + os.path.abspath(f) + "\n")
+                refname = os.path.basename(os.path.dirname(f))
+                replicate = f.rsplit(".fq.gz")[0].rsplit("_", 1)[1] # _01.fq.gz
+                csv.write(f"{refname}_{replicate}" + "," + os.path.abspath(f) + "\n")
