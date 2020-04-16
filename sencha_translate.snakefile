@@ -37,6 +37,10 @@ rule sencha_index:
     benchmark: os.path.join(logs_dir, "sencha_index", "ref{ref}_{alphabet}_k{ksize}.index.benchmark")
     params:
         alphabet=lambda w: alpha_abbreviations[w.alphabet],
+    threads: 1
+    resources:
+        mem_mb=16000,
+        runtime=6000 # ~4 days 
     wildcard_constraints:
         ref="\w+",
         alphabet="\w+",
@@ -60,6 +64,10 @@ rule sencha_translate:
     benchmark: os.path.join(logs_dir, "sencha_translate", "{sample}_{alphabet}_k{ksize}_ref{ref}.translate.benchmark")
     params:
         alphabet=lambda w: alpha_abbreviations[w.alphabet],
+    threads: 1
+    resources:
+        mem_mb=16000, #1GB
+        runtime=2000
     wildcard_constraints:
         ref="\w+",
         alphabet="\w+",
