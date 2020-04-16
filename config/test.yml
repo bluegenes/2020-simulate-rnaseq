@@ -1,10 +1,13 @@
 # config file for simulating reads from QfO
 
+
+run_name: test
 data_directory: config
+output_directory: /home/ntpierce/2020-simulate-rnaseq/test_simumlate_from_fasta
 
 reference_files:
   test_ager:
-    fasta: test_ager.fasta
+    cdna: test_ager.fasta
 
 simulation_params:
   read_len: 150

@@ -1,3 +1,5 @@
 #snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate.yml --profile slurm 
 
-snakemake -s simulate_from_fasta.snakefile --configfiles config/QfO_vertebrates.yml --profile slurm --jobs 10
+#snakemake -s simulate_from_fasta.snakefile --configfiles config/QfO_vertebrates.yml #--profile slurm --jobs 10 -n
+
+snakemake -s simulate_from_fasta.snakefile --configfiles config/test.yml --profile slurm --jobs 1

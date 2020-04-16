@@ -51,6 +51,10 @@ rule download_fasta:
     params: 
         download_link=lambda w: refLinks[w.refname]
     log: os.path.join(logsdir, "get_data", "{refname}.log")
+    threads: 1
+    resources:
+      mem_mb=1000, #1GB
+      runtime=60 #minutes
     shell:
         """
         curl -L {params.download_link} -o {output} 2> {log}
@@ -68,6 +72,10 @@ rule polyester_simreads_full:
         num_reads_per_transcript=sim_config.get("num_reads_per_transcript", 1000),
     log: os.path.join(logsdir, "{refname}.simreads.log")
     benchmark: os.path.join(logsdir, "{refname}.simreads.benchmark")
+    threads: 1
+    resources:
+      mem_mb=16000, #16GB
+      runtime=1000
     wildcard_constraints:
         refname="\w+",
         gene_name="\w+"
@@ -79,6 +87,10 @@ rule seqtk_fasta_to_fastq_full:
     output: os.path.join(simdir, "{refname}", "{refname}_{rep}.fq.gz")
     log: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.log")
     benchmark: os.path.join(logsdir, "seqtk", "{refname}_{rep}.seqtk.benchmark")
+    threads: 1
+    resources:
+      mem_mb=4000, #4GB
+      runtime=60 #minutes
     wildcard_constraints:
         refname="\w+",
         gene_name="\w+",
@@ -92,6 +104,10 @@ rule seqtk_fasta_to_fastq_full:
 rule write_samples_csv:
     input: expand(os.path.join(simdir, "{ref}", "{ref}_{rep}.fq.gz"), ref=refLinks.keys(), rep=replist),
     output: os.path.join(simdir, "{run_name}_samples.csv")
+    threads: 1
+    resources:
+      mem_mb=1000,
+      runtime=15
     run:
         with open(str(output), "w") as csv:
             csv.write("sample_id" + "," + "read_1"+ "\n")
