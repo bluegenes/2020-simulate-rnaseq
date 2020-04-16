@@ -15,15 +15,17 @@ reference_info = config["sencha_params"].get("peptide_references")
 
 # build output files based on config
 output_targets = []
+ref_targets = []
 output_extensions = ["codingpep.fa", "noncoding.fa", "lowcomplexnucl.fa", "csv"]
 
 alphabets_to_run = config["sencha_params"]["alphabet"] # dictionary of alphabets to run, corresponding ksizes 
 # build final file targets based on config info
 for alpha, alpha_info in alphabets_to_run.items():
     output_targets+=expand(os.path.join(translate_dir, "{sample}_{alphabet}_k{k}_ref{ref}.{ext}"), sample=list(sampleDF.index), alphabet=alpha, k=alpha_info["ksizes"], ref=reference_info.keys(), ext=output_extensions)
+    ref_targets+=expand(os.path.join(index_dir, "ref{ref}_{alphabet}_k{k}.index"), ref=reference_info.keys(), alphabet=alpha, k=alpha_info["ksizes"])
 
 rule all:
-    input: output_targets
+    input: ref_targets #output_targets
 
 # abbreviate "hydrophobic-polar" as hp in filenames. Need full alpha name for khtools code
 alpha_abbreviations = {"hp": "hydrophobic-polar", "protein": "protein", "dayhoff": "dayhoff"}
@@ -42,7 +44,7 @@ rule sencha_index:
     conda: os.path.join(envs_dir, "khtools-env.yml")
     shell:
         """
-        khtools index --alphabet {wildcards.alphabet} --peptide-ksize {wildcards.ksize} {input} > {output} 2> {log}
+        khtools index --alphabet {params.alphabet} --peptide-ksize {wildcards.ksize} {input} > {output} 2> {log}
         """
 
 rule sencha_translate:

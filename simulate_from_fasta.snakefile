@@ -23,8 +23,9 @@ reference_types = config.get("reference_types", default_reftypes)
 refLinks={}
 for reference in reffiles:
     for reftype, link in reffiles[reference].items():
-        refname = f"{reference}_{reftype}"
-        refLinks[refname] = link # build reference_name : download link dictionary
+        if reftype in reference_types:
+            refname = f"{reference}_{reftype}"
+            refLinks[refname] = link # build reference_name : download link dictionary
 
 ## polyester creates files called "sample_01.fasta.gz", sample_02.fasta.gz", etc
 def generate_replist(number_replicates):
