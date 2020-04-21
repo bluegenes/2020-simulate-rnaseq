@@ -30,8 +30,8 @@ for alpha, alpha_info in alphabets_to_run.items():
 
 rule all:
     input: 
-        #ref_targets,
-        output_targets
+        ref_targets,
+        #output_targets
 
 # abbreviate "hydrophobic-polar" as hp in filenames. Need full alpha name for khtools code
 alpha_abbreviations = {"hp": "hydrophobic-polar", "protein": "protein", "dayhoff": "dayhoff"}
@@ -61,10 +61,7 @@ rule sencha_index:
 rule sencha_translate:
     input:
         fastq=lambda w: sampleDF.loc[w.sample, "read1"],
-        #index=os.path.join(index_dir, "ref{ref}_{alphabet}_k{ksize}.index"),
         index= rules.sencha_index.output
-        #index = lambda w: reference_info[w.ref].rsplit(".gz")[0] + f".alphabet-{w.alphabet}_ksize-{w.ksize}.bloomfilter.nodegraph"
-        #MERC.fasta.alphabet-dayhoff_ksize-11.bloomfilter.nodegraph
     output:
         coding_prot=os.path.join(translate_dir, "{sample}_{alphabet}_k{ksize}_ref{ref}.codingpep.fa"),
         coding_nucl=os.path.join(translate_dir, "{sample}_{alphabet}_k{ksize}_ref{ref}.codingnucl.fa"),
