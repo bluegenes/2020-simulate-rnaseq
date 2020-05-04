@@ -1,0 +1,42 @@
+#samples_csv: gene_test.csv
+#samples_csv: QfO_vertebrate_samples.csv
+
+out_dir: output_simreads/sencha
+samples_csv: QfO_vertebrates/simulate_reads/QfO_vertebrates_samples.s100.csv
+
+sencha_params:
+  peptide_references:
+    sprot: 
+      path: /home/ntpierce/2020-pep/khtools_testing/uniprot_sprot.fasta.gz
+      tablesize: 1e9
+      index_memory: 20000
+    Hsapiens_QfO: 
+      path: /home/ntpierce/2020-simulate-rnaseq/output_simreads/data/QfO_release_2018_04/Eukaryota/UP000005640_9606_DNA.fasta
+      tablesize: 1e8
+      index_memory: 10000
+    #merc: 
+    #  path: /home/ntpierce/2020-pep/khtools_testing/MERC.fasta.gz
+    #  tablesize: 1e10
+    #  index_memory: 60000
+  alphabet:
+# reduce these to best defaults to start?
+    protein:
+      ksizes:
+        - 5
+        - 7
+        - 9
+    dayhoff:
+      ksizes:
+        - 9
+        - 11
+        - 13
+        - 15
+    hp:
+      ksizes:
+        - 21
+        - 25
+        - 27
+        - 29
+        - 31
+
+#khtools extract-coding --verbose --molecule {params.molecule} --peptide-ksize {wildcards.ksize} --noncoding-nucleotide-fasta {output.noncoding_nucl} --low-complexity-nucleotide-fasta {output.             low_complexity_nucl} --csv {output.csv} {input.pep_ref} {input.reads} > {output.coding_prot} 2> {log}

@@ -41,10 +41,11 @@ def generate_replist(number_replicates):
 # get polyester parameters from config; use replicates to build rep sample numbers
 sim_config = config.get("simulation_params")
 replist = generate_replist(sim_config.get("num_replicates", 5))
-
+NUMREADS = 100
 rule all:
     input: 
-        expand(os.path.join(simdir, "{run_name}_samples.csv"), run_name = runname)
+        expand(os.path.join(simdir, "{run_name}_samples.csv"), run_name = runname),
+        expand(os.path.join(simdir, "{run_name}_samples.s{numreads}.csv"), run_name = runname, numreads = NUMREADS)
 
 rule download_fasta:
     output: os.path.join(datadir, "{refname}.fa.gz")
@@ -98,7 +99,27 @@ rule seqtk_fasta_to_fastq_full:
     conda: "envs/seqtk-env.yml"
     shell:
         """
-        seqtk seq -F 'I' {input} | gzip -9 > {output}
+        seqtk seq -F 'I' {input} | gzip -9 > {output} 2> {log}
+        """
+
+rule subsample_reads:
+    input: rules.seqtk_fasta_to_fastq_full.output
+    output: os.path.join(simdir, "{refname}", "{refname}_s{numreads}_{rep}.fq.gz")
+    log: os.path.join(logsdir, "seqtk", "{refname}_s{numreads}_{rep}.seqtk_subsample.log")
+    benchmark: os.path.join(logsdir, "seqtk", "{refname}_s{numreads}_{rep}.seqtk_subsample.benchmark")
+    threads: 1
+    resources:
+      mem_mb=4000,
+      runtime=60
+    wildcard_constraints:
+        refname="\w+",
+        gene_name="\w+",
+        rep="\d+",
+        numreads="\d+"
+    conda: "envs/seqtk-env.yml"
+    shell:
+        """
+        seqtk sample -s100 {input} {wildcards.numreads} | gzip -9 > {output} 2> {log}
         """
 
 rule write_samples_csv:
@@ -108,9 +129,34 @@ rule write_samples_csv:
     resources:
       mem_mb=1000,
       runtime=15
+    wildcard_constraints:
+        refname="\w+",
+        gene_name="\w+",
+        rep="\d+",
+        numreads="\d+"
     run:
         with open(str(output), "w") as csv:
-            csv.write("sample_id" + "," + "read_1"+ "\n")
+            csv.write("sample_id" + "," + "read1"+ "\n")
+            for f in input:
+                refname = os.path.basename(os.path.dirname(f))
+                replicate = f.rsplit(".fq.gz")[0].rsplit("_", 1)[1] # _01.fq.gz
+                csv.write(f"{refname}_{replicate}" + "," + os.path.abspath(f) + "\n")
+
+rule write_subsampled_samples_csv:
+    input: expand(os.path.join(simdir, "{ref}", "{ref}_s{numreads}_{rep}.fq.gz"), ref=refLinks.keys(), rep=replist, numreads=NUMREADS),
+    output: os.path.join(simdir, "{run_name}_samples.s{numreads}.csv")
+    threads: 1
+    resources:
+      mem_mb=1000,
+      runtime=15
+    wildcard_constraints:
+        refname="\w+",
+        gene_name="\w+",
+        rep="\d+",
+        numreads="\d+"
+    run:
+        with open(str(output), "w") as csv:
+            csv.write("sample_id" + "," + "read1"+ "\n")
             for f in input:
                 refname = os.path.basename(os.path.dirname(f))
                 replicate = f.rsplit(".fq.gz")[0].rsplit("_", 1)[1] # _01.fq.gz

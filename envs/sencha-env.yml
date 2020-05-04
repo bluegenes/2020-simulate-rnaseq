@@ -9,5 +9,4 @@ dependencies:
   - s3fs
   - pip
   - pip:
-    - git+https://github.com/czbiohub/kh-tools
-    #- git+https://github.com/czbiohub/kh-tools@pranathi-refactor
+    - git+https://github.com/czbiohub/sencha
