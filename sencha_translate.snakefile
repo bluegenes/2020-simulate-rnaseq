@@ -81,7 +81,7 @@ rule sencha_translate:
     resources:
         #mem_mb=80000, #lambda wildcards, attempt: attempt *40000, #16GB*attempt
         #runtime=6000
-        mem_mb=lambda wildcards, attempt: attempt *3000,
+        mem_mb=lambda wildcards, attempt: attempt *10000,
         runtime=60
     wildcard_constraints:
         ref="\w+",
