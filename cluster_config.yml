@@ -1,0 +1,13 @@
+# cluster_config.yml - cluster configuration
+__default__:
+    account: ctbrowngrp
+    partition: bmm
+    mail-type: FAIL,TIME_LIMIT
+    #mail-user: ntpierce@ucdavis.edu
+    nodes: 1
+    ntasks-per-node: 1
+    job-name: "{rule}.w{wildcards}"
+    chdir: "/home/ntpierce/2020-simulate-rnaseq"
+    logdir: "/home/ntpierce/2020-simulate-rnaseq/slurm-logs/"
+    #stderr: "slurm-%j.stderr"
+    #stdout: "slurm-%j.stdout"

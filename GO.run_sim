@@ -13,7 +13,8 @@
 #snakemake -s simulate_from_fasta.snakefile --configfiles config/Hsapiens_genes_fasta.yml --profile farm --cluster-config cluster_config.yml --jobs 5
 #snakemake -s sencha_translate.snakefile --configfiles config/Hsapiens_genes.yml --profile farm --cluster-config cluster_config.yml --jobs 5
 
-#snakemake -s simulate_from_fasta.snakefile --configfiles config/QfO_vertebrates.yml --profile farm --jobs 20 --cluster-config simreads_cluster.yml
+#snakemake -s simulate_from_fasta.snakefile --configfiles config/QfO_vertebrates.yml --profile farm --jobs 15 --cluster-config simreads_cluster.yml
 
-snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile farm --cluster-config simreads_cluster.yml --jobs 10
+#snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile farm --cluster-config simreads_cluster.yml --jobs 5
+snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile farm --cluster-config simreads_cluster.yml --jobs 5
 
