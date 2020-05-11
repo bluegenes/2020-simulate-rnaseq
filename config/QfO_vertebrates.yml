@@ -9,109 +9,109 @@ output_directory: /home/ntpierce/2020-simulate-rnaseq/QfO_vertebrates
 reference_files: # Ensembl files for vertebrates in QfO. For humans: corresponding release.
   Homo_sapiens:
     ncRNA: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh37.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/pep/Homo_sapiens.GRCh37.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/pep/Homo_sapiens.GRCh37.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cds/Homo_sapiens.GRCh37.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/pep/Homo_sapiens.GRCh37.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/pep/Homo_sapiens.GRCh37.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cds/Homo_sapiens.GRCh37.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.abinitio.fa.gz
     #dna_primary_assembly: ftp://ftp.ensembl.org/pub/grch37/current/fasta/homo_sapiens/dna/Homo_sapiens.GRCh37.dna_sm.primary_assembly.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000005640_9606_DNA.fasta.gz
   Bos_taurus: # this is release 99 == newer than human data. hmm.
-    archive_tar: ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Bos_taurus/Ensembl/Btau_4.0/Bos_taurus_Ensembl_Btau_4.0.tar.gz #released 2007
+    #archive_tar: ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Bos_taurus/Ensembl/Btau_4.0/Bos_taurus_Ensembl_Btau_4.0.tar.gz #released 2007
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/ncrna/Bos_taurus.ARS-UCD1.2.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/pep/Bos_taurus.ARS-UCD1.2.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/pep/Bos_taurus.ARS-UCD1.2.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/cds/Bos_taurus.ARS-UCD1.2.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/cdna/Bos_taurus.ARS-UCD1.2.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/cdna/Bos_taurus.ARS-UCD1.2.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/pep/Bos_taurus.ARS-UCD1.2.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/pep/Bos_taurus.ARS-UCD1.2.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/cds/Bos_taurus.ARS-UCD1.2.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/cdna/Bos_taurus.ARS-UCD1.2.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/bos_taurus/cdna/Bos_taurus.ARS-UCD1.2.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000009136_9913_DNA.fasta.gz
   Danio_rerio:
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/ncrna/Danio_rerio.GRCz11.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/pep/Danio_rerio.GRCz11.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/pep/Danio_rerio.GRCz11.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/cds/Danio_rerio.GRCz11.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/cdna/Danio_rerio.GRCz11.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/cdna/Danio_rerio.GRCz11.cdna.abinitio.fa.gz 
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/pep/Danio_rerio.GRCz11.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/pep/Danio_rerio.GRCz11.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/cds/Danio_rerio.GRCz11.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/cdna/Danio_rerio.GRCz11.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/danio_rerio/cdna/Danio_rerio.GRCz11.cdna.abinitio.fa.gz 
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000000437_7955_DNA.fasta.gz
   Canis_lupus_familiaris:
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/ncrna/Canis_familiaris.CanFam3.1.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/pep/Canis_familiaris.CanFam3.1.pep.all.fa.gz 
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/pep/Canis_familiaris.CanFam3.1.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/cds/Canis_familiaris.CanFam3.1.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/cdna/Canis_familiaris.CanFam3.1.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/cdna/Canis_familiaris.CanFam3.1.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/pep/Canis_familiaris.CanFam3.1.pep.all.fa.gz 
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/pep/Canis_familiaris.CanFam3.1.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/cds/Canis_familiaris.CanFam3.1.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/cdna/Canis_familiaris.CanFam3.1.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/canis_familiaris/cdna/Canis_familiaris.CanFam3.1.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002254_9615_DNA.fasta.gz
   Gallus_gallus:
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/ncrna/Gallus_gallus.GRCg6a.ncrna.fa.gz 
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/cds/Gallus_gallus.GRCg6a.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/cdna/Gallus_gallus.GRCg6a.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/cdna/Gallus_gallus.GRCg6a.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/pep/Gallus_gallus.GRCg6a.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/cds/Gallus_gallus.GRCg6a.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/cdna/Gallus_gallus.GRCg6a.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gallus_gallus/cdna/Gallus_gallus.GRCg6a.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000000539_9031_DNA.fasta.gz
   Gorilla_gorilla_gorilla:
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/ncrna/Gorilla_gorilla.gorGor4.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/pep/Gorilla_gorilla.gorGor4.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/pep/Gorilla_gorilla.gorGor4.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/cds/Gorilla_gorilla.gorGor4.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/cdna/Gorilla_gorilla.gorGor4.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/cdna/Gorilla_gorilla.gorGor4.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/pep/Gorilla_gorilla.gorGor4.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/pep/Gorilla_gorilla.gorGor4.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/cds/Gorilla_gorilla.gorGor4.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/cdna/Gorilla_gorilla.gorGor4.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/gorilla_gorilla/cdna/Gorilla_gorilla.gorGor4.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000001519_9595_DNA.fasta.gz
   Lepisosteus_oculatus: #spotted gar
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/ncrna/Lepisosteus_oculatus.LepOcu1.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/pep/Lepisosteus_oculatus.LepOcu1.pep.all.fa.gz 
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/pep/Lepisosteus_oculatus.LepOcu1.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/cds/Lepisosteus_oculatus.LepOcu1.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/cdna/Lepisosteus_oculatus.LepOcu1.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/cdna/Lepisosteus_oculatus.LepOcu1.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/pep/Lepisosteus_oculatus.LepOcu1.pep.all.fa.gz 
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/pep/Lepisosteus_oculatus.LepOcu1.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/cds/Lepisosteus_oculatus.LepOcu1.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/cdna/Lepisosteus_oculatus.LepOcu1.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/lepisosteus_oculatus/cdna/Lepisosteus_oculatus.LepOcu1.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000018468_7918_DNA.fasta.gz
   Monodelphis_domestica: #Gray short-tailed opossum
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/ncrna/Tursiops_truncatus.turTru1.ncrna.fa.gz 
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/pep/Tursiops_truncatus.turTru1.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/pep/Tursiops_truncatus.turTru1.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/cds/Tursiops_truncatus.turTru1.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/cdna/Tursiops_truncatus.turTru1.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/cdna/Tursiops_truncatus.turTru1.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/pep/Tursiops_truncatus.turTru1.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/pep/Tursiops_truncatus.turTru1.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/cds/Tursiops_truncatus.turTru1.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/cdna/Tursiops_truncatus.turTru1.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/tursiops_truncatus/cdna/Tursiops_truncatus.turTru1.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002280_13616_DNA.fasta.gz
   Mus_musculus:
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/pep/Mus_musculus.GRCm38.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/pep/Mus_musculus.GRCm38.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/cds/Mus_musculus.GRCm38.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/pep/Mus_musculus.GRCm38.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/pep/Mus_musculus.GRCm38.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/cds/Mus_musculus.GRCm38.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000000589_10090_DNA.fasta.gz
   Oryzias_latipes: #Japanese medaka HSOK / Japanese killifish
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/ncrna/Oryzias_latipes_hsok.ASM223469v1.ncrna.fa.gz
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/pep/Oryzias_latipes_hsok.ASM223469v1.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/pep/Oryzias_latipes_hsok.ASM223469v1.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/cds/Oryzias_latipes_hsok.ASM223469v1.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/cdna/Oryzias_latipes_hsok.ASM223469v1.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/cdna/Oryzias_latipes_hsok.ASM223469v1.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/pep/Oryzias_latipes_hsok.ASM223469v1.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/pep/Oryzias_latipes_hsok.ASM223469v1.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/cds/Oryzias_latipes_hsok.ASM223469v1.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/cdna/Oryzias_latipes_hsok.ASM223469v1.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/oryzias_latipes_hsok/cdna/Oryzias_latipes_hsok.ASM223469v1.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000001038_8090_DNA.fasta.gz
   Pan_troglodytes: #Chimpanzee 
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/ncrna/Pan_troglodytes.Pan_tro_3.0.ncrna.fa.gz 
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/pep/Pan_troglodytes.Pan_tro_3.0.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/pep/Pan_troglodytes.Pan_tro_3.0.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/cds/Pan_troglodytes.Pan_tro_3.0.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/cdna/Pan_troglodytes.Pan_tro_3.0.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/cdna/Pan_troglodytes.Pan_tro_3.0.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/pep/Pan_troglodytes.Pan_tro_3.0.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/pep/Pan_troglodytes.Pan_tro_3.0.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/cds/Pan_troglodytes.Pan_tro_3.0.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/cdna/Pan_troglodytes.Pan_tro_3.0.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/pan_troglodytes/cdna/Pan_troglodytes.Pan_tro_3.0.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002277_9598_DNA.fasta.gz
   Rattus_norvegicus: #Rat 
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/ncrna/Rattus_norvegicus.Rnor_6.0.ncrna.fa.gz 
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/pep/Rattus_norvegicus.Rnor_6.0.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/pep/Rattus_norvegicus.Rnor_6.0.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/cds/Rattus_norvegicus.Rnor_6.0.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/cdna/Rattus_norvegicus.Rnor_6.0.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/cdna/Rattus_norvegicus.Rnor_6.0.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/pep/Rattus_norvegicus.Rnor_6.0.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/pep/Rattus_norvegicus.Rnor_6.0.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/cds/Rattus_norvegicus.Rnor_6.0.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/cdna/Rattus_norvegicus.Rnor_6.0.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/rattus_norvegicus/cdna/Rattus_norvegicus.Rnor_6.0.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000002494_10116_DNA.fasta.gz
   Xenopus_tropicalis: #Western clawed frog /Silurana tropicalis
     ncRNA: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/ncrna/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.ncrna.fa.gz 
-    pep: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/pep/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.pep.all.fa.gz
-    pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/pep/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.pep.abinitio.fa.gz
-    cds: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/cds/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.cds.all.fa.gz
-    cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/cdna/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.cdna.all.fa.gz
-    cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/cdna/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.cdna.abinitio.fa.gz
+    #pep: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/pep/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.pep.all.fa.gz
+    #pep_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/pep/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.pep.abinitio.fa.gz
+    #cds: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/cds/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.cds.all.fa.gz
+    #cdna: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/cdna/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.cdna.all.fa.gz
+    #cdna_abinitio: ftp://ftp.ensembl.org/pub/release-99/fasta/xenopus_tropicalis/cdna/Xenopus_tropicalis.Xenopus_tropicalis_v9.1.cdna.abinitio.fa.gz
     qfo_dna: ftp://ftp.ebi.ac.uk/pub/databases/reference_proteomes/QfO/Eukaryota/UP000008143_8364_DNA.fasta.gz
 
 simulation_params:

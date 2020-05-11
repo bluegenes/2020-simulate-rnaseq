@@ -3,7 +3,10 @@
 
 out_dir: output_simreads/sencha
 #samples_csv: QfO_vertebrates/simulate_reads/QfO_vertebrates_samples.s100.csv
-samples_csv: /home/ntpierce/2020-simulate-rnaseq/QfO_vertebrates/simulate_reads/combined_reads/QfO_vertebrates.ncRNA_qfo_dna.s100.samples.csv 
+# rerun just human samples to start
+#samples_csv: QfO_vertebrates/simulate_reads/QfO_Hsapiens_samples.s100.csv 
+# run all
+samples_csv: QfO_vertebrates/simulate_reads/QfO_vertebrates_samples.qfo_ncRNA.s100.csv
 
 sencha_params:
   peptide_references:
@@ -12,32 +15,56 @@ sencha_params:
       tablesize: 1e9
       index_memory: 20000
     Hsapiens_QfO: 
-      path: /home/ntpierce/2020-simulate-rnaseq/output_simreads/data/QfO_release_2018_04/Eukaryota/UP000005640_9606_DNA.fasta
+      path: /home/ntpierce/2020-simulate-rnaseq/output_simreads/data/QfO_release_2018_04/Eukaryota/UP000005640_9606.fasta
       tablesize: 1e8
-      index_memory: 10000
+      #tablesize: 1e9
+      index_memory: 20000
     #merc: 
     #  path: /home/ntpierce/2020-pep/khtools_testing/MERC.fasta.gz
     #  tablesize: 1e10
     #  index_memory: 60000
   alphabet:
-# reduce these to best defaults to start?
     protein:
       ksizes:
         - 5
+        - 6
         - 7
+        - 8
         - 9
+        - 10
+        - 11
+        - 12
+      jaccard_threshold:
+        - 0.45
+        - 0.5
+        - 0.55
+        - 0.6
     dayhoff:
       ksizes:
         - 9
+        - 10
         - 11
+        - 12
         - 13
+        - 14
         - 15
+        - 16
+        - 17
+      jaccard_threshold:
+        - 0.45
+        - 0.5
+        - 0.55
+        - 0.6
     hp:
       ksizes:
+        - 13
+        - 15
+        - 17
+        - 19
         - 21
-        - 25
-        - 27
-        - 29
-        - 31
-
-#khtools extract-coding --verbose --molecule {params.molecule} --peptide-ksize {wildcards.ksize} --noncoding-nucleotide-fasta {output.noncoding_nucl} --low-complexity-nucleotide-fasta {output.             low_complexity_nucl} --csv {output.csv} {input.pep_ref} {input.reads} > {output.coding_prot} 2> {log}
+        - 23
+      jaccard_threshold:
+        - 0.75
+        - 0.8
+        - 0.85
+        - 0.9
