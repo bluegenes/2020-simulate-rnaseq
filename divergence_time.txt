@@ -1,0 +1,14 @@
+species,median_time_mya,estimated_time_mya
+Homo_sapiens,0,0
+Bos_taurus,94,96  
+Canis_lupus_familiaris,94,96
+Danio_rerio,433,435
+Gallus_gallus,318,312
+Gorilla_gorilla_gorilla,8.6,9.06
+Lepisosteus_oculatus,433,435
+Monodelphis_domestica,160,159
+Mus_musculus,89,90
+Oryzias_latipes,433,435
+Pan_troglodytes,6.4,6.7
+Rattus_norvegicus,89,90
+Xenopus_tropicalis,351.7,351.8

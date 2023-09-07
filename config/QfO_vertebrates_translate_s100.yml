@@ -4,9 +4,9 @@
 out_dir: output_simreads/sencha
 #samples_csv: QfO_vertebrates/simulate_reads/QfO_vertebrates_samples.s100.csv
 # rerun just human samples to start
-#samples_csv: QfO_vertebrates/simulate_reads/QfO_Hsapiens_samples.s100.csv 
+samples_csv: QfO_vertebrates/simulate_reads/QfO_Hsapiens_samples.s100.csv 
 # run all
-samples_csv: QfO_vertebrates/simulate_reads/QfO_vertebrates_samples.qfo_ncRNA.s100.csv
+#samples_csv: QfO_vertebrates/simulate_reads/QfO_vertebrates_samples.qfo_ncRNA.s100.csv
 
 sencha_params:
   peptide_references:
@@ -25,46 +25,11 @@ sencha_params:
     #  index_memory: 60000
   alphabet:
     protein:
-      ksizes:
-        - 5
-        - 6
-        - 7
-        - 8
-        - 9
-        - 10
-        - 11
-        - 12
-      jaccard_threshold:
-        - 0.45
-        - 0.5
-        - 0.55
-        - 0.6
+      ksizes: [3,5,7,9,11,13,15,17,19,21,23]
+      jaccard_threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8, 0.9, 1.0]
     dayhoff:
-      ksizes:
-        - 9
-        - 10
-        - 11
-        - 12
-        - 13
-        - 14
-        - 15
-        - 16
-        - 17
-      jaccard_threshold:
-        - 0.45
-        - 0.5
-        - 0.55
-        - 0.6
-    hp:
-      ksizes:
-        - 13
-        - 15
-        - 17
-        - 19
-        - 21
-        - 23
-      jaccard_threshold:
-        - 0.75
-        - 0.8
-        - 0.85
-        - 0.9
+      ksizes: [5,7,9,11,13,15,17,19,21,23,25,27,29]
+      jaccard_threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8, 0.9, 1.0]
+#    hp:
+#      ksizes: [13,15,17,19,21,23,25,29,29,31,33,35,37,39]
+#      jaccard_threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 1.0]

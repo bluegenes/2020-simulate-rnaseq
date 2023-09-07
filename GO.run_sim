@@ -16,9 +16,14 @@
 #snakemake -s simulate_from_fasta.snakefile --configfiles config/QfO_vertebrates.yml --profile farm --cluster-config simreads_cluster.yml --jobs 15
 
 #snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile farm --cluster-config simreads_cluster.yml --jobs 5
-snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile farm --cluster-config simreads_cluster.yml --jobs 22
 
 #snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile default
 
 #snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate.yml --profile farm --cluster-config simreads_cluster.yml --jobs 8 
+
+# running: 5/11/2020
+#snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100.yml --profile farm --cluster-config simreads_cluster.yml --jobs 15
+
+# to run
+snakemake -s sencha_translate.snakefile --configfiles config/QfO_vertebrates_translate_s100_allverts.yml --profile farm --cluster-config simreads_cluster.yml --jobs 22
 

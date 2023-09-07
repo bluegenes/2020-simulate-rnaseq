@@ -51,7 +51,7 @@ rule sencha_index:
     threads: 1
     resources:
         mem_mb=lambda w:  reference_info[w.ref].get("index_memory", 20000),
-        runtime=6000 # ~4 days
+        runtime=1000,
     wildcard_constraints:
         ref="\w+",
         alphabet="\w+",
@@ -80,13 +80,9 @@ rule sencha_translate:
         alphabet=lambda w: alpha_abbreviations[w.alphabet],
     threads: 1
     resources:
-        mem_mb=lambda wildcards, attempt: attempt *40000, #40GB*attempt
-        #mem_mb=50000,
-        runtime=6000
-        # subsampled files:
-        #mem_mb=lambda wildcards, attempt: attempt *10000,
+        mem_mb=lambda wildcards, attempt: attempt *2000,
+        runtime=60
         #mem_mb=lambda wildcards, attempt: attempt *4000,
-        #runtime=60
     wildcard_constraints:
         ref="\w+",
         alphabet="\w+",
@@ -97,6 +93,10 @@ rule sencha_translate:
         """
         sencha translate --verbose --peptides-are-bloom-filter --alphabet {params.alphabet} --peptide-ksize {wildcards.ksize} --jaccard-threshold {wildcards.jaccard_thresh} --noncoding-nucleotide-fasta {output.noncoding_nucl} --low-complexity-nucleotide-fasta {output.low_complexity_nucl} --coding-nucleotide-fasta {output.coding_nucl} --low-complexity-peptide-fasta {output.low_complexity_prot} --csv {output.csv} --json-summary {output.json} {input.index} {input.fastq} > {output.coding_prot} 2> {log}
         """
+        #mem_mb=lambda wildcards, attempt: attempt *40000, #40GB*attempt
+        #mem_mb=50000,
+        #runtime=6000
+        # subsampled files:
 
 # currently only works on human samples - others have `,` in read names, making parsing more difficult
 localrules: summarize_read_by_read
